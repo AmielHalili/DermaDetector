@@ -2,11 +2,24 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
+
+const toBase64 = file =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+  });
+  
+
+
 function Home() {
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState(null);
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
+
+  
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -23,6 +36,20 @@ function Home() {
     try {
       const response = await axios.post('http://127.0.0.1:5000/predict', formData);
       setResult(response.data);
+      
+      const imageData = await toBase64(image);
+
+    const stored = JSON.parse(localStorage.getItem("derma_history")) || [];
+    const newEntry = {
+    image: imageData,
+    result: response.data.result,
+    confidence: response.data.confidence,
+    timestamp: new Date().toLocaleString()
+    };
+    localStorage.setItem("derma_history", JSON.stringify([newEntry, ...stored]));
+
+    
+
     } catch (err) {
       setResult({ error: 'Failed to get prediction' });
     }
