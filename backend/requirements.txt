@@ -1,0 +1,6 @@
+flask
+flask-cors
+tensorflow
+pillow
+numpy
+pandas
