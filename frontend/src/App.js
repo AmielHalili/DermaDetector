@@ -20,6 +20,7 @@ function App() {
         <NavLink to="/history" style={styles.link} className={({ isActive }) => `navlink-hover ${isActive ? 'nav-active' : ''}`}>History</NavLink>
 
 
+
         </div>
       </div>
 
