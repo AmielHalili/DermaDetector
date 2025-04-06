@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  background-color: tan;
 }
 
 .App-logo {
@@ -35,4 +36,19 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+a.nav-active {
+  color: #4da6ff !important;
+  border-bottom: 2px solid #4da6ff;
+}
+
+.navlink-hover {
+  transition: all 0.2s ease;
+  display: inline-block;
+}
+
+.navlink-hover:hover {
+  color: #4da6ff;
+  transform: translateY(-4px);
 }

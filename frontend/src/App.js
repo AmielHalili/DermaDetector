@@ -1,58 +1,89 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, NavLink } from 'react-router-dom';
+import Home from './pages/Home';
+import About from './pages/About';
+import History from './pages/History';
 import './App.css';
 
+
 function App() {
-  const [image, setImage] = useState(null);
-  const [preview, setPreview] = useState(null);
-  const [result, setResult] = useState(null);
-  const [loading, setLoading] = useState(false);
-
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    setImage(file);
-    setPreview(URL.createObjectURL(file));
-    setResult(null);
-  };
-
-  const handleSubmit = async () => {
-    if (!image) return;
-
-    const formData = new FormData();
-    formData.append('image', image);
-
-    setLoading(true);
-    try {
-      const response = await axios.post('http://127.0.0.1:5000/predict', formData);
-      setResult(response.data);
-    } catch (err) {
-      setResult({ error: 'Failed to get prediction' });
-    }
-    setLoading(false);
-  };
-
   return (
-    <div className="App" style={{ padding: '2rem', maxWidth: '500px', margin: 'auto' }}>
-      <h1>DermaDetector</h1>
-      <input type="file" accept="image/*" onChange={handleImageChange} />
-      {preview && <img src={preview} alt="preview" style={{ width: '100%', marginTop: '1rem' }} />}
-      <button onClick={handleSubmit} disabled={loading} style={{ marginTop: '1rem' }}>
-        {loading ? 'Analyzing...' : 'Predict'}
-      </button>
-      {result && (
-        <div style={{ marginTop: '1rem' }}>
-          {result.error ? (
-            <p style={{ color: 'red' }}>{result.error}</p>
-          ) : (
-            <>
-              <h2>Result: {result.result}</h2>
-              <p>Confidence: {result.confidence}%</p>
-            </>
-          )}
+    <Router>
+      <div style={styles.navbar}>
+        <div style={styles.logoContainer}>
+          <img src="/logo.png" alt="Logo" style={styles.logo} />
+          <span style={styles.logoText}>DermaDetect</span>
         </div>
-      )}
-    </div>
+        <div style={styles.navLinks}>
+        <NavLink to="/" style={styles.link} className={({ isActive }) => `navlink-hover ${isActive ? 'nav-active' : ''}`}>Home</NavLink>
+        <NavLink to="/about" style={styles.link} className={({ isActive }) => `navlink-hover ${isActive ? 'nav-active' : ''}`}>About</NavLink>
+        <NavLink to="/history" style={styles.link} className={({ isActive }) => `navlink-hover ${isActive ? 'nav-active' : ''}`}>History</NavLink>
+
+
+        </div>
+      </div>
+
+      <div style={styles.page}>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/history" element={<History />} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
+
+const styles = {
+  navbar: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: '#121212',
+    padding: '1rem 2rem',
+    borderBottom: '1px solid #2a2a2a',
+    boxShadow: '0 2px 10px rgba(0,0,0,0.7)',
+  },
+  logoContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: '0.75rem',
+  },
+  logo: {
+    height: '100px',
+    width: '100px',
+  },
+  logoText: {
+    fontSize: '3rem',
+    fontWeight: '600',
+    color: '#4da6ff',
+    textShadow: '0 0 10px rgba(255, 255, 255, 0.5)',
+  },
+  navLinks: {
+    display: 'flex',
+    gap: '2rem',
+  },
+  link: {
+    textDecoration: 'none',
+    fontSize: '1rem',
+    color: '#f0f0f0',
+    transition: 'color 0.2s ease',
+  },
+  page: {
+    backgroundColor: '#1a1a1a',
+    minHeight: '100vh',
+    color: '#f0f0f0',
+    paddingTop: '2rem',
+  },
+  link: {
+    textDecoration: 'none',
+    fontSize: '1rem',
+    color: '#f0f0f0',
+    paddingBottom: '4px',
+  }
+  
+  
+  
+};
 
 export default App;
