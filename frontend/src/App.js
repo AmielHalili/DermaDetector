@@ -33,7 +33,7 @@ function App() {
 
   return (
     <div className="App" style={{ padding: '2rem', maxWidth: '500px', margin: 'auto' }}>
-      <h1>DermaDetector</h1>
+      <h1>DermaDetect</h1>
       <input type="file" accept="image/*" onChange={handleImageChange} />
       {preview && <img src={preview} alt="preview" style={{ width: '100%', marginTop: '1rem' }} />}
       <button onClick={handleSubmit} disabled={loading} style={{ marginTop: '1rem' }}>
